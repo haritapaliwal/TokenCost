@@ -18,38 +18,38 @@ route handles email lead capture with honeypot abuse protection. The shareable
 flowchart TD
     A([Visitor]) --> B[Landing page\n/]
 
-    B --> C[Spend input form\nTools · Plans · Seats · Use case]
+    B --> C["Spend input form\nTools - Plans - Seats - Use case"]
     C -->|localStorage| C
 
     C --> D{Audit engine\nlib/auditEngine.ts}
 
-    D --> E[Per-tool recommendations\ncurrentSpend → action → savings]
+    D --> E["Per-tool recommendations\ncurrentSpend -> action -> savings"]
     E --> F[Results page\n/audit/new]
 
-    F --> G[/api/create-audit\nPOST/]
+    F --> G["/api/create-audit\nPOST/"]
 
-    G --> H[(Supabase\naudits table\ntools + savings — no PII)]
-    G --> I[/api/generate-summary\nPOST/]
+    G --> H[("Supabase\naudits table\ntools + savings - no PII")]
+    G --> I["/api/generate-summary\nPOST/"]
 
-    I --> J[Anthropic API\nclaude-sonnet-4-20250514]
+    I --> J["Anthropic API\nclaude-sonnet-4-20250514"]
     J -->|~100-word paragraph| I
-    I -->|fallback on error| K[Templated summary\nbuilt from audit data]
+    I -->|fallback on error| K["Templated summary\nbuilt from audit data"]
     I --> F
 
     F --> L{Savings threshold}
-    L -->|"> $500/mo"| M[Credex CTA\nBook consultation]
-    L -->|"< $100/mo or optimal"| N[You're spending well\nNotify me signup]
+    L -->|"> $500/mo"| M["Credex CTA\nBook consultation"]
+    L -->|"< $100/mo or optimal"| N["You're spending well\nNotify me signup"]
 
     F --> O[Share button\nUnique URL copied]
-    O --> P[/audit/id\nPublic shareable page\nPII stripped · OG tags]
+    O --> P["/audit/id\nPublic shareable page\nPII stripped - OG tags"]
 
-    F --> Q[Email gate\nValue shown first]
-    Q --> R[/api/capture-lead\nPOST/]
+    F --> Q["Email gate\nValue shown first"]
+    Q --> R["/api/capture-lead\nPOST/"]
     R --> S{Abuse check}
     S -->|Honeypot filled| T[Silently drop]
     S -->|Rate limit hit| U[429 response]
-    S -->|Clean| V[(Supabase\nleads table\nemail · company · role)]
-    V --> W[Resend\nTransactional email\nAudit summary + Credex note]
+    S -->|Clean| V[("Supabase\nleads table\nemail - company - role")]
+    V --> W["Resend\nTransactional email\nAudit summary + Credex note"]
 
     style A fill:#f0f0f0,stroke:#999
     style J fill:#D4EBF9,stroke:#185FA5
