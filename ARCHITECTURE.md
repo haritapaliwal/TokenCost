@@ -37,8 +37,8 @@ flowchart TD
     I --> F
 
     F --> L{Savings threshold}
-    L -->|> $500/mo| M[Credex CTA\nBook consultation]
-    L -->|< $100/mo or optimal| N[You're spending well\nNotify me signup]
+    L -->|"> $500/mo"| M[Credex CTA\nBook consultation]
+    L -->|"< $100/mo or optimal"| N[You're spending well\nNotify me signup]
 
     F --> O[Share button\nUnique URL copied]
     O --> P[/audit/id\nPublic shareable page\nPII stripped · OG tags]
