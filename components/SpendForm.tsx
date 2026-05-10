@@ -15,14 +15,20 @@ function cn(...inputs: ClassValue[]) {
 
 const USE_CASES: { id: UseCase; label: string }[] = [
   { id: 'coding', label: 'Coding / Development' },
-  { id: 'general', label: 'General / Writing' },
-  { id: 'enterprise', label: 'Enterprise / Teams' },
-  { id: 'individual', label: 'Individual Use' },
+  { id: 'writing', label: 'Writing / Content' },
+  { id: 'research', label: 'Research / Analysis' },
+  { id: 'data', label: 'Data Science / Math' },
+  { id: 'mixed', label: 'Mixed / General Use' },
 ];
 
 export default function SpendForm() {
   const [isMounted, setIsMounted] = React.useState(false);
   const [entries, setEntries] = useLocalStorage<ToolEntry[]>('audit-entries', []);
+  const [teamSize, setTeamSize] = useLocalStorage<number>('audit-team-size', 1);
+  const [globalUseCase, setGlobalUseCase] = useLocalStorage<UseCase>(
+    'audit-global-use-case',
+    'mixed'
+  );
   const [results, setResults] = useState<AuditResult | null>(null);
 
   // Fix hydration mismatch
@@ -44,7 +50,10 @@ export default function SpendForm() {
       setEntries(entries.filter((e) => e.toolId !== toolId));
     } else {
       newSelected.add(toolId);
-      setEntries([...entries, { toolId, plan: '', seats: 1, monthlySpend: 0, useCase: 'general' }]);
+      setEntries([
+        ...entries,
+        { toolId, plan: '', seats: 1, monthlySpend: 0, useCase: globalUseCase },
+      ]);
     }
   };
 
@@ -66,11 +75,64 @@ export default function SpendForm() {
   if (!isMounted) return null;
 
   if (results) {
-    return <AuditResults results={results} onReset={() => setResults(null)} />;
+    return (
+      <AuditResults
+        results={results}
+        teamSize={teamSize}
+        useCase={globalUseCase}
+        onReset={() => setResults(null)}
+      />
+    );
   }
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900">Company Context</h2>
+          <p className="text-slate-500 mt-1">
+            Tell us about your team to tailor the recommendations.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="text-sm font-bold text-slate-700 mb-2 block">Total Team Size</label>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={teamSize === 0 ? '' : teamSize}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === '' || /^\d+$/.test(val)) {
+                  setTeamSize(val === '' ? 0 : parseInt(val));
+                }
+              }}
+              onBlur={() => {
+                if (teamSize < 1) setTeamSize(1);
+              }}
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-bold text-slate-700 mb-2 block">
+              Primary Business Use Case
+            </label>
+            <select
+              value={globalUseCase}
+              onChange={(e) => setGlobalUseCase(e.target.value as UseCase)}
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all appearance-none bg-white"
+            >
+              {USE_CASES.map((uc) => (
+                <option key={uc.id} value={uc.id}>
+                  {uc.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Select your AI Tools</h2>
