@@ -95,4 +95,39 @@ docs: document AI prompt strategy in PROMPTS.md
 
 ---
 
-_Next up: Day 4 — Shareable UUIDs, Supabase Persistence, and Dynamic OG Images._
+---
+
+## Day 4: Database, Lead Capture & Shareable URLs
+
+**Morning: Persistence Layer**
+
+- Set up Supabase with `audits` and `leads` tables.
+- Implemented `save-audit` API to persist deterministic engine results.
+- Built a unique UUID-based sharing system.
+
+**Afternoon: Lead Generation & Automation**
+
+- Built the `LeadCapture` component with a value-first email gate.
+- Implemented `capture-lead` API with honeypot protection and in-memory rate limiting.
+- Integrated Resend for transactional confirmation emails.
+
+**Evening: Viral Sharing & Public Views**
+
+- Created the public shareable route `/audit/[id]`.
+- Implemented dynamic Open Graph and Twitter Card metadata via `generateMetadata()`.
+- Optimized the `AuditResults` dashboard for read-only public consumption.
+
+### Commits today
+
+```
+feat: add Supabase schema for audits and leads tables
+feat: implement email lead capture with honeypot and rate limit
+feat: send transactional confirmation email via Resend
+feat: generate unique shareable audit URLs with public view
+feat: add dynamic Open Graph and Twitter Card meta tags
+docs: update DEVLOG Day 4
+```
+
+---
+
+_Next up: Day 5 — Analytics, Advanced Rule Refinement, and Final Polish._

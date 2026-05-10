@@ -7,27 +7,54 @@ import {
   CheckCircle2,
   ArrowRight,
   Sparkles,
-  Mail,
   ShieldCheck,
   ExternalLink,
+  Copy,
+  Check,
 } from 'lucide-react';
+import LeadCapture from './LeadCapture';
 
 interface AuditResultsProps {
   results: AuditResult;
   teamSize: number;
   useCase: UseCase;
-  onReset: () => void;
+  isPublic?: boolean;
+  onReset?: () => void;
 }
 
-export default function AuditResults({ results, teamSize, useCase, onReset }: AuditResultsProps) {
+export default function AuditResults({
+  results,
+  teamSize,
+  useCase,
+  isPublic = false,
+  onReset,
+}: AuditResultsProps) {
   const [summary, setSummary] = useState<string | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(true);
+  const [auditId, setAuditId] = useState<string | null>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
   const hasSavings = results.totalMonthlySavings > 0;
   const isHighSavings = results.totalMonthlySavings > 500;
 
   useEffect(() => {
-    async function fetchSummary() {
+    async function saveAuditAndFetchSummary() {
       try {
+        // 1. Save Audit to Supabase
+        const saveResponse = await fetch('/api/save-audit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recommendations: results.recommendations,
+            totalMonthlySavings: results.totalMonthlySavings,
+            totalAnnualSavings: results.totalAnnualSavings,
+            teamSize,
+            useCase,
+          }),
+        });
+        const saveData = await saveResponse.json();
+        if (saveData.id) setAuditId(saveData.id);
+
+        // 2. Fetch AI Summary
         const response = await fetch('/api/generate-summary', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -42,14 +69,22 @@ export default function AuditResults({ results, teamSize, useCase, onReset }: Au
         const data = await response.json();
         setSummary(data.summary);
       } catch (error) {
-        console.error('Failed to fetch AI summary:', error);
+        console.error('Failed to process audit:', error);
       } finally {
         setLoadingSummary(false);
       }
     }
 
-    fetchSummary();
+    saveAuditAndFetchSummary();
   }, [results, teamSize, useCase]);
+
+  const copyShareLink = () => {
+    if (!auditId) return;
+    const url = `${window.location.origin}/audit/${auditId}`;
+    navigator.clipboard.writeText(url);
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
+  };
 
   return (
     <div className="max-w-5xl mx-auto space-y-10 p-6 animate-in fade-in zoom-in duration-700">
@@ -70,6 +105,22 @@ export default function AuditResults({ results, teamSize, useCase, onReset }: Au
                 ? `We've identified $${results.totalAnnualSavings.toLocaleString()} in annual waste across your subscriptions.`
                 : "You're currently using the most cost-effective tiers for your team size."}
             </p>
+
+            {auditId && (
+              <div className="pt-2">
+                <button
+                  onClick={copyShareLink}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-bold text-sm"
+                >
+                  {copySuccess ? (
+                    <Check size={16} className="text-green-400" />
+                  ) : (
+                    <Copy size={16} />
+                  )}
+                  {copySuccess ? 'Link Copied!' : 'Copy Shareable Link'}
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col items-center">
@@ -195,8 +246,11 @@ export default function AuditResults({ results, teamSize, useCase, onReset }: Au
         </div>
       </div>
 
-      {/* Dynamic CTAs */}
-      {isHighSavings ? (
+      {/* Lead Capture / Email Gate */}
+      <LeadCapture auditId={auditId || ''} teamSize={teamSize} />
+
+      {/* Credex CTA (Conditional) */}
+      {isHighSavings && (
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[2rem] p-10 text-white shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
             <ShieldCheck size={120} />
@@ -215,45 +269,30 @@ export default function AuditResults({ results, teamSize, useCase, onReset }: Au
             </button>
           </div>
         </div>
-      ) : (
-        <div className="bg-slate-100 rounded-[2rem] p-10 border border-slate-200">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="space-y-2 text-center md:text-left">
-              <h3 className="text-2xl font-bold text-slate-900 flex items-center justify-center md:justify-start gap-2">
-                <Mail className="text-blue-600" size={24} />
-                Stay Optimized
-              </h3>
-              <p className="text-slate-500 font-medium">
-                We&apos;ll notify you when new plan tiers or competitor pricing models can lower
-                your bill.
-              </p>
-            </div>
-            <div className="flex w-full md:w-auto gap-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 md:w-64 px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-              />
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors shrink-0">
-                Notify Me
-              </button>
-            </div>
-          </div>
+      )}
+
+      {/* Reset Button (Only if not public) */}
+      {!isPublic && (
+        <div className="flex flex-col items-center gap-4 pt-10 border-t border-slate-200">
+          <button
+            onClick={onReset}
+            className="text-slate-400 font-bold hover:text-slate-900 transition-colors flex items-center gap-2 text-sm"
+          >
+            Modify Audit Data
+          </button>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            Deterministic Audit Engine v1.2 • PRICING VERIFIED MAY 2026
+          </p>
         </div>
       )}
 
-      {/* Reset Button */}
-      <div className="flex flex-col items-center gap-4 pt-10 border-t border-slate-200">
-        <button
-          onClick={onReset}
-          className="text-slate-400 font-bold hover:text-slate-900 transition-colors flex items-center gap-2 text-sm"
-        >
-          Modify Audit Data
-        </button>
-        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-          Deterministic Audit Engine v1.2 • PRICING VERIFIED MAY 2026
-        </p>
-      </div>
+      {isPublic && (
+        <div className="flex flex-col items-center gap-4 pt-10 border-t border-slate-200">
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            Deterministic Audit Engine v1.2 • PRICING VERIFIED MAY 2026
+          </p>
+        </div>
+      )}
     </div>
   );
 }
