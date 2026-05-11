@@ -24,3 +24,15 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Ensure placeholder text is clearly visible across all inputs */
+input::placeholder,
+textarea::placeholder {
+  color: #334155 !important; /* slate-700 — high contrast on white */
+  opacity: 1 !important; /* Firefox reduces opacity by default */
+}
+
+/* Ensure select text is always dark (not browser-default grey) */
+select {
+  color: #1e293b; /* slate-800 */
+}

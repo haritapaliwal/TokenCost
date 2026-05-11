@@ -97,10 +97,14 @@ export default function SpendForm() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="text-sm font-bold text-slate-700 mb-2 block">Total Team Size</label>
+            <label htmlFor="team-size" className="text-sm font-bold text-slate-700 mb-2 block">
+              Total Team Size
+            </label>
             <input
+              id="team-size"
               type="text"
               inputMode="numeric"
+              placeholder="10"
               value={teamSize === 0 ? '' : teamSize}
               onChange={(e) => {
                 const val = e.target.value;
@@ -111,14 +115,15 @@ export default function SpendForm() {
               onBlur={() => {
                 if (teamSize < 1) setTeamSize(1);
               }}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-slate-900 placeholder:text-slate-500"
             />
           </div>
           <div>
-            <label className="text-sm font-bold text-slate-700 mb-2 block">
+            <label htmlFor="use-case" className="text-sm font-bold text-slate-700 mb-2 block">
               Primary Business Use Case
             </label>
             <select
+              id="use-case"
               value={globalUseCase}
               onChange={(e) => setGlobalUseCase(e.target.value as UseCase)}
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all appearance-none bg-white"
@@ -146,6 +151,8 @@ export default function SpendForm() {
               <button
                 key={tool.id}
                 onClick={() => toggleTool(tool.id)}
+                aria-pressed={isSelected}
+                aria-label={`${isSelected ? 'Deselect' : 'Select'} ${tool.name}`}
                 className={cn(
                   'flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 text-sm font-medium',
                   isSelected
@@ -188,24 +195,32 @@ export default function SpendForm() {
 
                   <div className="grid grid-cols-1 gap-3">
                     <div>
-                      <label className="text-xs font-semibold text-slate-500 mb-1 block">
+                      <label
+                        htmlFor={`plan-${entry.toolId}`}
+                        className="text-xs font-semibold text-slate-500 mb-1 block"
+                      >
                         Plan Name
                       </label>
                       <input
+                        id={`plan-${entry.toolId}`}
                         type="text"
                         placeholder="e.g. Pro, Team, Business"
                         value={entry.plan}
                         onChange={(e) => updateEntry(entry.toolId, { plan: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm text-slate-900 placeholder:text-slate-400"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm text-slate-900 placeholder:text-slate-500"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="text-xs font-semibold text-slate-500 mb-1 block">
+                        <label
+                          htmlFor={`seats-${entry.toolId}`}
+                          className="text-xs font-semibold text-slate-500 mb-1 block"
+                        >
                           Seats
                         </label>
                         <input
+                          id={`seats-${entry.toolId}`}
                           type="text"
                           inputMode="numeric"
                           value={entry.seats === 0 ? '' : entry.seats}
@@ -218,14 +233,18 @@ export default function SpendForm() {
                           onBlur={() => {
                             if (entry.seats < 1) updateEntry(entry.toolId, { seats: 1 });
                           }}
-                          className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm text-slate-900"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm text-slate-900 placeholder:text-slate-500"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-500 mb-1 block">
+                        <label
+                          htmlFor={`spend-${entry.toolId}`}
+                          className="text-xs font-semibold text-slate-500 mb-1 block"
+                        >
                           Monthly ($)
                         </label>
                         <input
+                          id={`spend-${entry.toolId}`}
                           type="text"
                           inputMode="decimal"
                           value={entry.monthlySpend === 0 ? '' : entry.monthlySpend}
@@ -237,16 +256,20 @@ export default function SpendForm() {
                               });
                             }
                           }}
-                          className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm text-slate-900"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm text-slate-900 placeholder:text-slate-500"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-xs font-semibold text-slate-500 mb-1 block">
+                      <label
+                        htmlFor={`usecase-${entry.toolId}`}
+                        className="text-xs font-semibold text-slate-500 mb-1 block"
+                      >
                         Primary Use Case
                       </label>
                       <select
+                        id={`usecase-${entry.toolId}`}
                         value={entry.useCase}
                         onChange={(e) =>
                           updateEntry(entry.toolId, { useCase: e.target.value as UseCase })
