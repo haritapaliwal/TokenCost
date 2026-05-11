@@ -82,24 +82,42 @@ export default function LeadCapture({ auditId, teamSize }: LeadCaptureProps) {
           />
 
           <div className="flex flex-col sm:flex-row gap-2">
+            <label htmlFor="lead-email" className="sr-only">
+              Work email address
+            </label>
             <input
+              id="lead-email"
               type="email"
               required
               placeholder="Enter your work email"
               value={email}
+              aria-label="Enter your work email address"
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1 md:w-64 px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all text-slate-900 font-medium"
             />
             <button
               type="submit"
               disabled={status === 'loading'}
+              aria-label={
+                status === 'loading'
+                  ? 'Saving your audit report...'
+                  : 'Save audit report and send to email'
+              }
               className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-blue-200 active:scale-95"
             >
-              {status === 'loading' ? <Loader2 className="animate-spin" size={20} /> : 'Save Audit'}
+              {status === 'loading' ? (
+                <Loader2 className="animate-spin" size={20} aria-hidden="true" />
+              ) : (
+                'Save Audit'
+              )}
             </button>
           </div>
           {status === 'error' && (
-            <p className="text-red-500 text-xs font-bold mt-2 text-center md:text-left">
+            <p
+              role="alert"
+              aria-live="assertive"
+              className="text-red-500 text-xs font-bold mt-2 text-center md:text-left"
+            >
               {errorMessage}
             </p>
           )}

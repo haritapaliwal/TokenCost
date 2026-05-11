@@ -131,3 +131,40 @@ docs: update DEVLOG Day 4
 ---
 
 _Next up: Day 5 — Analytics, Advanced Rule Refinement, and Final Polish._
+
+---
+
+## Day 5: End-to-End QA, Accessibility & Tests
+
+**Morning: QA Pass**
+
+- Walked the full user journey: land → form → results → AI summary → share URL → email capture → inbox confirmation.
+- Fixed Next.js 15 async `params` breaking the shareable URL page (404).
+- Fixed Server Component → Client Component prop error (`onReset` function not serializable).
+- Fixed email sender domain using `onboarding@resend.dev` for local testing.
+
+**Afternoon: Accessibility (Lighthouse prep)**
+
+- Added `aria-label` to all icon-only buttons: Copy Link, Modify Audit Data, Save Audit.
+- Added `id`, `htmlFor` label association, and `aria-label` to email input in LeadCapture.
+- Added `role="alert"` and `aria-live="assertive"` to error messages.
+- Added `aria-hidden="true"` to decorative spinner icons.
+
+**Evening: Test Suite**
+
+- Expanded audit engine tests to **7 cases** (T01–T07).
+- Total: **9 tests across 2 suites** — all passing.
+- Created `TESTS.md` documenting all test files, coverage, and run instructions.
+
+### Commits today
+
+```
+fix: resolve accessibility issues found in Lighthouse audit
+test: complete audit engine test suite — 9 tests passing
+docs: add TESTS.md with test coverage list
+docs: update DEVLOG Day 5
+```
+
+---
+
+_Next up: Deploy to Vercel, run Lighthouse, and ship!_

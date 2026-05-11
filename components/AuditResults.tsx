@@ -33,6 +33,7 @@ export default function AuditResults({
   const [loadingSummary, setLoadingSummary] = useState(true);
   const [auditId, setAuditId] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const hasSavings = results.totalMonthlySavings > 0;
   const isHighSavings = results.totalMonthlySavings > 500;
 
@@ -110,6 +111,9 @@ export default function AuditResults({
               <div className="pt-2">
                 <button
                   onClick={copyShareLink}
+                  aria-label={
+                    copySuccess ? 'Link copied to clipboard' : 'Copy shareable link to clipboard'
+                  }
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-bold text-sm"
                 >
                   {copySuccess ? (
@@ -213,22 +217,44 @@ export default function AuditResults({
                 </div>
 
                 {!isOptimal ? (
-                  <div className="flex flex-row lg:flex-col items-center lg:items-end gap-6 w-full lg:w-auto pt-6 lg:pt-0 border-t lg:border-t-0 border-slate-100">
-                    <div className="flex-1 lg:text-right">
-                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-                        Monthly Savings
+                  <div className="flex flex-col items-start lg:items-end gap-4 w-full lg:w-auto pt-6 lg:pt-0 border-t lg:border-t-0 border-slate-100">
+                    <div className="flex flex-row lg:flex-col items-center lg:items-end gap-6 w-full lg:w-auto">
+                      <div className="flex-1 lg:text-right">
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                          Monthly Savings
+                        </div>
+                        <div className="text-3xl font-black text-green-600 tracking-tighter">
+                          +${rec.savings.toLocaleString()}
+                        </div>
                       </div>
-                      <div className="text-3xl font-black text-green-600 tracking-tighter">
-                        +${rec.savings.toLocaleString()}
-                      </div>
+                      <button
+                        onClick={() => setExpandedCard(expandedCard === index ? null : index)}
+                        aria-label={
+                          expandedCard === index
+                            ? `Collapse action for ${tool?.name}`
+                            : `See recommended action for ${tool?.name}`
+                        }
+                        className="bg-slate-900 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-600 transition-all flex items-center gap-2 shrink-0 shadow-lg hover:shadow-blue-200 group-hover:-translate-y-1"
+                      >
+                        {expandedCard === index ? 'Close' : 'Action'}
+                        <ArrowRight
+                          size={16}
+                          className={`transition-transform ${expandedCard === index ? 'rotate-90' : ''}`}
+                        />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => alert(`Taking action for ${tool?.name}...`)}
-                      className="bg-slate-900 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-600 transition-all flex items-center gap-2 shrink-0 shadow-lg hover:shadow-blue-200 group-hover:-translate-y-1"
-                    >
-                      Action
-                      <ArrowRight size={16} />
-                    </button>
+
+                    {/* Inline Action Panel */}
+                    {expandedCard === index && (
+                      <div className="w-full bg-blue-50 border border-blue-100 rounded-2xl p-5 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2">
+                          Recommended Action
+                        </p>
+                        <p className="text-blue-900 font-bold text-sm leading-relaxed">
+                          {rec.recommendedAction}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="text-right hidden lg:block pr-4">
@@ -277,6 +303,7 @@ export default function AuditResults({
           <button
             onClick={onReset}
             className="text-slate-400 font-bold hover:text-slate-900 transition-colors flex items-center gap-2 text-sm"
+            aria-label="Go back and modify audit data"
           >
             Modify Audit Data
           </button>

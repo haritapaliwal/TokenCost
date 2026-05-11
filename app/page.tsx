@@ -9,7 +9,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 py-16 text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-4 border border-blue-100">
             <Zap size={14} className="fill-blue-600" />
-            Day 3: AI Insights Live
+            Day 5: QA & Production Ready
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
             Stop overpaying for <span className="text-blue-600">AI tools.</span>
