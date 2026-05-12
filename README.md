@@ -17,17 +17,6 @@ AI Spend Audit is a B2B lead-generation tool built for **Credex**. It helps star
 
 ---
 
-## 📸 Screenshots
-
-|                          1. Input Form                           |                        2. Optimization Results                         |                         3. Lead Capture                          |
-| :--------------------------------------------------------------: | :--------------------------------------------------------------------: | :--------------------------------------------------------------: |
-| ![Form](https://token-cost-ochre.vercel.app/screenshot-form.png) | ![Results](https://token-cost-ochre.vercel.app/screenshot-results.png) | ![Lead](https://token-cost-ochre.vercel.app/screenshot-lead.png) |
-|                 _Simple, multi-tool selection._                  |                     _Detailed savings breakdown._                      |                      _Save & Share report._                      |
-
-_(Note: Replace with real screenshots after deployment)_
-
----
-
 ## 🛠️ Quick Start
 
 ### 1. Clone & Install
