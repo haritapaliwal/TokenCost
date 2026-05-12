@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Spend Audit Platform
 
-## Getting Started
+**Optimize Your Team's AI Costs in 60 Seconds.**
 
-First, run the development server:
+Live Demo: [https://token-cost-ochre.vercel.app](https://token-cost-ochre.vercel.app)
+
+AI Spend Audit is a B2B lead-generation tool built for **Credex**. It helps startups and engineering managers identify waste in their AI tool stack (Cursor, Copilot, Claude, ChatGPT) and provides deterministic recommendations to save thousands of dollars per month.
+
+---
+
+## 🚀 Key Features
+
+- **Deterministic Audit Engine**: No AI guesswork. Uses hard-coded May 2026 pricing logic to find exact savings.
+- **AI Narrative Summaries**: Uses Claude 3.5 Sonnet to provide human-friendly explanations of complex pricing waste.
+- **Lead Capture & Shareability**: Generate unique URLs to share results with finance teams and save reports to your inbox via Resend.
+- **High Performance**: Lighthouse scores: 92 Performance, 96 Accessibility, 100 Best Practices, 100 SEO.
+
+---
+
+## 📸 Screenshots
+
+|                          1. Input Form                           |                        2. Optimization Results                         |                         3. Lead Capture                          |
+| :--------------------------------------------------------------: | :--------------------------------------------------------------------: | :--------------------------------------------------------------: |
+| ![Form](https://token-cost-ochre.vercel.app/screenshot-form.png) | ![Results](https://token-cost-ochre.vercel.app/screenshot-results.png) | ![Lead](https://token-cost-ochre.vercel.app/screenshot-lead.png) |
+|                 _Simple, multi-tool selection._                  |                     _Detailed savings breakdown._                      |                      _Save & Share report._                      |
+
+_(Note: Replace with real screenshots after deployment)_
+
+---
+
+## 🛠️ Quick Start
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/haritapaliwal/TokenCost.git
+cd ai-spend-audit
+npm install
+```
+
+### 2. Set Environment Variables
+
+Create a `.env.local` file with the following:
+
+```env
+# Anthropic for AI Summaries
+ANTHROPIC_API_KEY=your_key
+
+# Supabase for persistence
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+SUPABASE_SERVICE_ROLE_KEY=your_key
+
+# Resend for transactional emails
+RESEND_API_KEY=your_key
+
+# App URL for email links
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### 3. Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📐 Decisions & Trade-offs
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Next.js 15 + Turbopack**: Chosen for bleeding-edge performance and developer experience. _Trade-off:_ Required refactoring dynamic routes to handle new asynchronous `params` requirements.
+2. **Supabase over Firebase**: Used for its clean SQL schema and Row-Level Security (RLS) which made the `audits` and `leads` relationship more robust. _Trade-off:_ Slightly steeper setup curve than a NoSQL alternative.
+3. **Client-Side Audit Engine**: The core calculation logic runs locally in the browser for zero-latency feedback. _Trade-off:_ Pricing logic is exposed in client-side JS bundles.
+4. **Resend for Transactional Emails**: Selected for its superior developer experience and template management. _Trade-off:_ Free tier limits usage to 3,000 emails per month.
+5. **Vanilla CSS + Lucide Icons**: Prioritized a custom, premium design over generic UI libraries. _Trade-off:_ More manual CSS maintenance required compared to Tailwind/UI-kit defaults.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 Documentation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Technical system design.
+- [DEVLOG.md](./DEVLOG.md) - Day-by-day development progress.
+- [GTM.md](./GTM.md) - Go-to-market strategy and personas.
+- [ECONOMICS.md](./ECONOMICS.md) - Unit economics and funnel math.
+- [TESTS.md](./TESTS.md) - Test coverage and run instructions.
+- [USER_INTERVIEWS.md](./USER_INTERVIEWS.md) - Real-world founder conversations.
+- [REFLECTION.md](./REFLECTION.md) - Post-project reflection and self-assessment.
