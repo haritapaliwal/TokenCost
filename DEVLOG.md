@@ -168,3 +168,49 @@ docs: update DEVLOG Day 5
 ---
 
 _Next up: Deploy to Vercel, run Lighthouse, and ship!_
+
+---
+
+## Day 6: GTM, Economics & Research Docs
+
+**GTM.md**
+
+- Defined primary persona: Engineering manager at Series A, 5–15 devs, $500–2K/mo AI spend.
+- Listed specific subreddits, Slack communities, and X accounts.
+- 30-day / $0 budget plan: Show HN, Indie Hackers, 20 YC founder DMs, viral share loop.
+- Identified unfair channel: Credex existing customer email list.
+
+**ECONOMICS.md**
+
+- LTV per converted lead: $400 (conservative, $200 avg credit × 25% margin × 8 months).
+- Full funnel: 40% → 30% → 8% → 50% = $2/visitor.
+- Back-calculated: $1M ARR requires ~520K visits/year or ~1,700/day.
+- Infrastructure cost: ~$5/month. One customer covers 80 months.
+
+**LANDING_COPY.md**
+
+- Hero: "Stop overpaying for AI tools. Know in 60 seconds."
+- Mocked social proof block (clearly labeled).
+- 5 real FAQ Q&As.
+
+**METRICS.md**
+
+- North Star: Audits completed that result in email capture.
+- 3 input metrics: completion rate, email capture rate, share CTR.
+- Pivot triggers with specific thresholds.
+- Weekly dashboard template.
+
+**USER_INTERVIEWS.md**
+
+- Template created with recruiting scripts and question guide.
+- ⚠️ Interviews must be conducted by Harita — cannot be fabricated.
+
+### Commits today
+
+```
+docs: add GTM.md with specific channels and 100-user plan
+docs: add ECONOMICS.md with unit economics breakdown
+docs: add LANDING_COPY.md and METRICS.md
+docs: add USER_INTERVIEWS.md template
+docs: update DEVLOG Day 6
+```
