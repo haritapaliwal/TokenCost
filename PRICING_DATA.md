@@ -13,7 +13,7 @@
 | ---------- | -------------- | ------------------------------------------ |
 | Hobby      | Free           | 2,000 completions/month, 50 slow requests  |
 | Pro        | $20/month      | Unlimited completions, 500 fast requests   |
-| Business   | $40/user/month | Team features, admin controls, SSO         |
+| Teams      | $40/user/month | Team features, admin controls, SSO         |
 | Enterprise | Contact Us     | Estimated ~$60–80/user/month based on comp |
 
 **API pricing:** N/A — Cursor proxies models, billed at plan level.

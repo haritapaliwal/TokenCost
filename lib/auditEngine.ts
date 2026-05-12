@@ -24,7 +24,7 @@ const PRICING = {
     pro: 20,
     max_5x: 100,
     max_20x: 200,
-    team_standard: 20,
+    team_standard: 25,
     team_premium: 100,
   },
   chatgpt: {
@@ -32,7 +32,7 @@ const PRICING = {
     go: 8,
     plus: 20,
     pro: 200,
-    business: 20,
+    business: 25,
   },
   gemini: {
     free: 0,
@@ -115,7 +115,7 @@ function analyzeCursor(entry: ToolEntry): AuditRecommendation {
       return savingsFound(entry, altSavings, {
         finding: `Cursor is an AI code editor — your primary use case is ${useCase}, not coding.`,
         recommendedAction: 'Evaluate whether Cursor is the right tool for your use case',
-        reason: `A ${useCase}-focused team of ${seats} may be better served by Claude Team ($${PRICING.claude.team_standard}/seat) or ChatGPT Business ($${PRICING.chatgpt.business}/seat) — tools designed for writing and research workflows, at a lower price point.`,
+        reason: `A ${useCase}-focused team of ${seats} may be better served by Claude Team ($${PRICING.claude.team_standard}/seat) or ChatGPT Team ($${PRICING.chatgpt.business}/seat) — tools designed for writing and research workflows, at a lower price point.`,
       });
     }
 
